@@ -12,6 +12,7 @@ from utils.response import CustomResponse
 from utils.types import TokenType
 from .models import User,Token
 from .serializers import UserCUDSerializer
+from ganaura_backend.settings import SECRET_KEY
 
 
 class UserRegisterAPI(APIView):
