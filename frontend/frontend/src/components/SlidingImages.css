@@ -1,0 +1,28 @@
+.sliding-container {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px; /* Add space above the bottom bar */
+}
+
+.sliding-row {
+  display: inline-block;
+  animation: slide 20s linear infinite;
+}
+
+.sliding-image {
+  height: 150px;
+  margin: 0 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}

@@ -1,0 +1,72 @@
+.home-container {
+  position: relative;
+  height: 100vh;
+  background-image: url('/src/assets/bg.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  color: white;
+}
+
+/* Top Bar */
+.top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px; /* Adjust height as needed */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 20px; /* Add padding to the right */
+}
+
+.login-icon {
+  font-size: 24px;
+  cursor: pointer;
+  color: white; /* Ensure the icon is visible */
+}
+
+.login-icon:hover {
+  opacity: 0.8; /* Add hover effect */
+}
+
+/* Content (Heading and Quote) */
+.content {
+  max-width: 600px;
+  margin-left: 50px;
+}
+
+.heading {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.quote {
+  font-size: 20px;
+  font-style: italic;
+}
+
+/* Bottom Bar */
+/* Bottom Bar */
+.bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px; /* Same height as the top bar */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent white */
+}
+
+.sliding-images-wrapper {
+  position: absolute;
+  bottom: 70px; /* Positioned above the bottom bar */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
