@@ -2,12 +2,12 @@ import React from 'react';
 import './SlidingImages.css'; // Create this file for styling
 
 const images = [
-  '/src/assets/image1.jpg',
-  '/src/assets/image2.jpg',
-  '/src/assets/image3.jpg',
-  '/src/assets/image4.jpg',
-  '/src/assets/image5.jpg',
-  '/src/assets/image6.jpg',
+  '/images/image1.jpg', // Path to images in the public folder
+  '/images/image2.jpg',
+  '/images/image3.jpg',
+  '/images/image4.jpg',
+  '/images/image5.jpg',
+  '/images/image6.jpg',
 ];
 
 const SlidingImages: React.FC = () => {
