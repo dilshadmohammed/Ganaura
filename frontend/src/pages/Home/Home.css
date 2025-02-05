@@ -6,7 +6,7 @@
   background-position: center;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; /* Move content up */
   align-items: flex-start;
   padding: 20px;
   color: white;
@@ -26,33 +26,82 @@
   padding-right: 20px; /* Add padding to the right */
 }
 
+.login-section {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between text and icon */
+  cursor: pointer;
+}
+
+.login-text {
+  font-size: 18px;
+  font-family: 'Poppins', sans-serif;
+  color: white;
+}
+
 .login-icon {
   font-size: 24px;
-  cursor: pointer;
   color: white; /* Ensure the icon is visible */
 }
 
-.login-icon:hover {
+.login-section:hover .login-text,
+.login-section:hover .login-icon {
   opacity: 0.8; /* Add hover effect */
 }
 
-/* Content (Heading and Quote) */
+/* Content (Heading, Quote, and Get Started Button) */
 .content {
-  max-width: 600px;
+  max-width: 800px; /* Increased width to accommodate the button */
   margin-left: 50px;
+  margin-top: 200px; /* Move content up */
 }
 
 .heading {
-  font-size: 48px;
+  font-size: 65px;
   margin-bottom: 20px;
+  font-family: 'Poppins', sans-serif; /* Modern and bold font */
+  font-weight: 700;
+}
+
+.quote-section {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Space between quote and button */
 }
 
 .quote {
-  font-size: 20px;
-  font-style: italic;
+  font-size: 22px;
+  margin: 0; /* Remove default margin */
+  font-family: 'Poppins', sans-serif; /* Elegant and classic font */
 }
 
-/* Bottom Bar */
+.get-started-button {
+  padding: 12px 24px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white; /* White text */
+  background: transparent; /* Transparent background */
+  border: 2px solid white; /* White border */
+  border-radius: 30px; /* Rounded corners */
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+  font-family: 'Poppins', sans-serif; /* Match heading font */
+}
+
+.get-started-button:hover {
+  background: white; /* White background on hover */
+  color: #000; /* Black text on hover */
+}
+
+/* Sliding Images Wrapper */
+.sliding-images-wrapper {
+  position: absolute;
+  bottom: 70px; /* Positioned above the bottom bar */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 /* Bottom Bar */
 .bottom-bar {
   position: absolute;
@@ -60,13 +109,5 @@
   left: 0;
   width: 100%;
   height: 60px; /* Same height as the top bar */
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent white */
-}
-
-.sliding-images-wrapper {
-  position: absolute;
-  bottom: 70px; /* Positioned above the bottom bar */
-  width: 100%;
-  display: flex;
-  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
 }
