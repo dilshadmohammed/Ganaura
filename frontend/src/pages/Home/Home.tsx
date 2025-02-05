@@ -11,25 +11,35 @@ const Home: React.FC = () => {
     navigate('/login'); // Redirect to the login page
   };
 
+  const handleGetStartedClick = () => {
+    navigate('/get-started'); // Redirect to the get started page
+  };
+
   return (
     <div className="home-container">
       {/* Top Bar */}
       <div className="top-bar">
-        <div className="login-icon" onClick={handleLoginClick}>
-          <FaUserCircle size={24} /> {/* Use the FaUserCircle icon */}
+        <div className="login-section" onClick={handleLoginClick}>
+          <span className="login-text">Login</span>
+          <FaUserCircle size={24} className="login-icon" />
         </div>
       </div>
 
-      {/* Heading and Quote */}
+      {/* Heading, Quote, and Get Started Button */}
       <div className="content">
         <h1 className="heading">GANAURA</h1>
-        <p className="quote">"Bringing Anime to Life Like Never Before"</p>
+        <div className="quote-section">
+          <p className="quote">"Bringing Anime to Life Like Never Before"</p>
+          <button className="get-started-button" onClick={handleGetStartedClick}>
+            Get Started →
+          </button>
+        </div>
       </div>
 
       {/* Sliding Images near Bottom Bar */}
-<div className="sliding-images-wrapper">
-  <SlidingImages />
-</div>
+      <div className="sliding-images-wrapper">
+        <SlidingImages />
+      </div>
 
       {/* Bottom Bar */}
       <div className="bottom-bar"></div>
