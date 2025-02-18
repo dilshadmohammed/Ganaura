@@ -23,6 +23,20 @@ class JWTAuth(BasePermission):
     def authenticate_header(self, request):
         return f'{self.token_prefix} realm="api"'
     
+class FastAPIAuth(BasePermission):
+    """Custom authentication for requests coming from FastAPI"""
+
+    FASTAPI_SECRET = "absdfasasdfasf"
+
+    def has_permission(self, request, view):
+        """Check if request contains valid FastAPI secret"""
+        secret = request.headers.get("FastAPI-Secret")
+
+        if not secret or secret != self.FASTAPI_SECRET:
+            return False
+
+        return True
+    
 class JWTUtils:
     @staticmethod
     def fetch_user_id(request):
@@ -37,6 +51,18 @@ class JWTUtils:
             )
         return user_id
     
+    
+    @staticmethod
+    def fetch_user_id_ws(token):
+        """Decode JWT token and return user ID"""
+        try:
+            decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            return decoded_token.get("id")
+        except jwt.ExpiredSignatureError:
+            return None  # Token expired
+        except jwt.InvalidTokenError:
+            return None  # Invalid token
+
     @staticmethod
     def fetch_expiry(request):
         token = authentication.get_authorization_header(request).decode("utf-8").split()

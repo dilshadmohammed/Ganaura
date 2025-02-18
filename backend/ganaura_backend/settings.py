@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'ganaura_backend.urls'
 
 CORS_ALLOW_ALL_ORIGINS = True
