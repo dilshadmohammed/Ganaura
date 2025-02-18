@@ -1,0 +1,3 @@
+.ganvenv/
+__pycache__/
+.env

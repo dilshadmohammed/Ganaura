@@ -1,45 +1,66 @@
-from fastapi import FastAPI, Request, HTTPException, BackgroundTasks
+from fastapi import FastAPI, Request, HTTPException, BackgroundTasks,Form,WebSocket, WebSocketDisconnect, Depends
 import asyncio
 import boto3
 import uuid
 import os
 import requests
+from typing import Dict
+
+from utils import JWTUtils
+
 
 app = FastAPI()
 
-# DigitalOcean Spaces Configuration
-DO_SPACES_REGION = "nyc3"  # Change based on your region
-DO_SPACES_BUCKET = "your-bucket-name"
-DO_SPACES_ENDPOINT = f"https://{DO_SPACES_REGION}.digitaloceanspaces.com"
-DO_SPACES_ACCESS_KEY = "your-access-key"
-DO_SPACES_SECRET_KEY = "your-secret-key"
+active_connections: Dict[str, WebSocket] = {}
+DJANGO_API_URL = 'http://127.0.0.1:8000/api/gan/save-video/'
+FASTAPI_SECRET = "absdfasasdfasf"
 
-# Create S3 client
-s3_client = boto3.client(
-    "s3",
-    endpoint_url=DO_SPACES_ENDPOINT,
-    aws_access_key_id=DO_SPACES_ACCESS_KEY,
-    aws_secret_access_key=DO_SPACES_SECRET_KEY,
-)
+@app.websocket("/ws/progress/")
+async def websocket_endpoint(websocket: WebSocket):
+    """WebSocket connection secured with JWT"""
+    token = websocket.query_params.get("token")
+    user_id = JWTUtils.fetch_user_id_ws(token)
+    if not user_id:
+        await websocket.close(code=4001)
+        return  
 
+    await websocket.accept()
+    active_connections[user_id] = websocket
 
-DJANGO_API_URL = "http://127.0.0.1:8000/api/update-progress/"
-# Simulating a request from Django
-DJANGO_SECRET_TOKEN = "your-secret-token"
+    try:
+        while True:
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        active_connections.pop(user_id, None)
+
 
 async def generate_video(task_id, user_id):
-    """Simulate AI video generation and notify Django"""
-    for progress in [0, 25, 50, 75, 100]:
-        await asyncio.sleep(2)  # Simulate processing time
+    """Simulate AI video generation and notify WebSocket clients"""
+    print("Video processing started")
 
-        # Notify Django with user_id
-        requests.post(DJANGO_API_URL, json={"user_id": user_id, "progress": progress})
+    for progress in [0, 25, 50, 75, 100]:
+        await asyncio.sleep(3)
+
+        websocket = active_connections.get(user_id)
+        if websocket:
+            try:
+                await websocket.send_json({
+                    "progress": progress,
+                    "task_id": task_id,
+                })
+            except Exception as e:
+                print(f"Error sending WebSocket update: {e}")
+        else:
+            print(f"User {user_id} is not connected.")
+    
+    requests.post(DJANGO_API_URL,headers={"FastAPI-Secret": FASTAPI_SECRET},json={"user_id": user_id,"video_url":"hello.com"})
 
 @app.post("/process-video/")
-async def process_video(user_id: int, background_tasks: BackgroundTasks):
+async def process_video(background_tasks: BackgroundTasks, user_id: str = Form(...), video_path: str = Form(...)):
     """Start video processing in background"""
     background_tasks.add_task(generate_video, "task_123", user_id)
     return {"message": "Processing started"}
+
 
 if __name__ == "__main__":
     import uvicorn
