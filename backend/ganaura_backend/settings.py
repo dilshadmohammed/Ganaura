@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_crontab',
     'corsheaders',
     'user',
+    'generation_service'
 ]
 
 MIDDLEWARE = [
