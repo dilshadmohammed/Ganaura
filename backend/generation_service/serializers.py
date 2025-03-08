@@ -3,11 +3,13 @@ from .models import UserMedia
 
 class UserMediaSerializer(serializers.ModelSerializer):
     file = serializers.FileField(write_only=True)
+    user_id = serializers.IntegerField(write_only=True)  # Accept user ID in API request
+    username = serializers.CharField(source="user.username", read_only=True)
 
     class Meta:
         model = UserMedia
-        fields = ['id', 'file', 'media_type', 'uploaded_at']
-        read_only_fields = ['id', 'media_type', 'uploaded_at']
+        fields = ['id', 'user_id', 'username', 'file', 'media_type', 'uploaded_at']
+        read_only_fields = ['id', 'media_type', 'uploaded_at', 'username']
 
     def validate_file(self, value):
         """Validate the uploaded file type."""
@@ -20,7 +22,10 @@ class UserMediaSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        """Override create to auto-detect media type."""
-        instance = UserMedia(**validated_data)
+        """Override create to assign the user and auto-detect media type."""
+        user_id = validated_data.pop('user_id')
+        user = User.objects.get(id=user_id)  # Fetch user from ID
+
+        instance = UserMedia(user=user, **validated_data)
         instance.save()  # This will trigger the `save` method in models.py
         return instance

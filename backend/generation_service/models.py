@@ -1,15 +1,20 @@
-
 import os
+import uuid
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 def user_media_path(instance, filename):
-    """Save images in 'images/' and videos in 'videos/' based on file type."""
+    """Generate unique file paths based on media type"""
     ext = filename.split('.')[-1].lower()
+    unique_filename = f"{uuid.uuid4()}.{ext}"
+
     if ext in ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']:
-        return f'images/{filename}'
+        return f'images/{unique_filename}'
     elif ext in ['mp4', 'mov', 'avi', 'mkv', 'flv', 'wmv']:
-        return f'videos/{filename}'
+        return f'videos/{unique_filename}'
     else:
         raise ValidationError("Unsupported file format.")
 
@@ -19,6 +24,7 @@ class UserMedia(models.Model):
         ('video', 'Video'),
     ]
     
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="media_uploads")
     file = models.FileField(upload_to=user_media_path)
     media_type = models.CharField(max_length=10, choices=MEDIA_TYPE_CHOICES, editable=False)
     uploaded_at = models.DateTimeField(auto_now_add=True)
@@ -35,5 +41,4 @@ class UserMedia(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.media_type} - {self.file.name}"
-    
+        return f"{self.user.username} - {self.media_type} - {self.file.name}"

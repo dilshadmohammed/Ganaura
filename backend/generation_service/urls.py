@@ -1,10 +1,10 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import GenerateVideo,UserMediaUploadView,SaveVideoUrl
+from .views import GenerateVideo,SaveVideoUrl
 
 urlpatterns = [
-    path('upload/', UserMediaUploadView.as_view(), name='upload-media'),
+    #path('upload/', UserMediaUploadView.as_view(), name='upload-media'),
     path("generate-video/", GenerateVideo.as_view(), name="generate_video"),
     path("save-video/",SaveVideoUrl.as_view(),name='save-video')
 ]
