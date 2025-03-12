@@ -4,15 +4,18 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f0f2f5;
+  background-color: rgba(0, 0, 0, 0.8); /* Dark transparent background */
+  background-image: url('/images/image6.avif'); /* Optional: Keep the background image */
+  background-size: cover;
+  background-position: center;
   font-family: Arial, sans-serif;
 }
 
 .login-form {
-  background-color: #ffffff;
+  background-color: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   width: 100%;
   max-width: 400px;
 }
@@ -20,7 +23,7 @@
 .login-form h2 {
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
-  color: #333;
+  color: #ffffff; /* White text */
   text-align: center;
 }
 
@@ -32,20 +35,26 @@
 .input-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #555;
+  color: #ffffff; /* White text */
 }
 
 .input-group input {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid #444; /* Darker border */
   border-radius: 4px;
   font-size: 1rem;
+  background-color: rgba(255, 255, 255, 0.1); /* Transparent input background */
+  color: #ffffff46; /* White text */
+}
+
+.input-group input::placeholder {
+  color: #cccccc64; /* Light gray placeholder text */
 }
 
 .input-group input:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: #007bff; /* Blue border on focus */
 }
 
 /* Remember Me and Forgot Password */
@@ -65,8 +74,12 @@
   margin-right: 0.5rem;
 }
 
+.remember-me label {
+  color: #ffffff6a; /* White text */
+}
+
 .forgot-password {
-  color: #007bff;
+  color: #0e0f1082; /* Blue link */
   text-decoration: none;
   font-size: 0.875rem;
 }
@@ -79,7 +92,7 @@
 .sign-in-button {
   width: 100%;
   padding: 0.75rem;
-  background-color: #007bff;
+  background-color: #007bff; /* Blue button */
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -88,18 +101,18 @@
 }
 
 .sign-in-button:hover {
-  background-color: #0056b3;
+  background-color: #0056b3; /* Darker blue on hover */
 }
 
 /* Sign Up Link */
 .sign-up {
   text-align: center;
   margin-top: 1rem;
-  color: #555;
+  color: #ffffff; /* White text */
 }
 
 .sign-up a {
-  color: #007bff;
+  color: #007bff; /* Blue link */
   text-decoration: none;
 }
 
@@ -119,19 +132,20 @@
 .divider::after {
   content: '';
   flex: 1;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #444; /* Darker divider */
 }
 
 .divider span {
   padding: 0 0.5rem;
+  color: #ffffff; /* White text */
 }
 
 /* Google Sign In Button */
 .google-sign-in {
   width: 100%;
   padding: 0.75rem;
-  background-color: #fff;
-  color: #333;
+  background-color: #ffffff; /* White button */
+  color: #333; /* Dark text */
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
@@ -142,13 +156,20 @@
 }
 
 .google-sign-in:hover {
-  background-color: #f9f9f9;
+  background-color: #f1f1f1; /* Light gray on hover */
 }
 
 .google-logo {
   width: 20px;
   height: 20px;
   margin-right: 0.5rem;
+}
+
+/* Error Messages */
+.error {
+  color: #ff6b6b; /* Red error text */
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
 }
 
 /* Media Queries for Mobile */
@@ -173,9 +194,4 @@
   .google-sign-in {
     padding: 0.5rem;
   }
-}
-.error {
-  color: #ff0000;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
 }
