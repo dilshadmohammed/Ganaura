@@ -2,9 +2,7 @@ import os
 import uuid
 from django.db import models
 from django.core.exceptions import ValidationError
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
+from user.models import User
 
 def user_media_path(instance, filename):
     """Generate unique file paths based on media type"""
@@ -28,6 +26,7 @@ class UserMedia(models.Model):
     file = models.FileField(upload_to=user_media_path)
     media_type = models.CharField(max_length=10, choices=MEDIA_TYPE_CHOICES, editable=False)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    processed_video_url = models.URLField(blank=True, null=True)  # New field to store processed video URL
 
     def save(self, *args, **kwargs):
         """Automatically determine if the uploaded file is an image or a video."""

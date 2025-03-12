@@ -6,7 +6,8 @@ from .models import UserMedia
 from .serializers import UserMediaSerializer
 import requests
 from utils.permission import JWTAuth, JWTUtils
-
+from user.models import User
+from .models import UserMedia
 
 FASTAPI_URL = "http://127.0.0.1:9000/process-video/"
 
@@ -73,15 +74,30 @@ class GenerateVideo(APIView):
             return Response(serializer.data, status=201)
 
         return Response(serializer.errors, status=400)
-
+    
 class SaveVideoUrl(APIView):
 
-    def post(self,request):
+    def post(self, request):
         user_id = request.data.get('user_id')
         video_url = request.data.get('video_url')
 
-        """
-        Save the video url to database
-        """
+        print("Received user_id:", user_id)
 
-        return Response({"message":"video url saved"},status=200)
+        # Ensure user_id and video_url are provided
+        if not user_id or not video_url:
+            return Response({"error": "User ID and video URL are required"}, status=400)
+
+        # Check if user_id exists in User model
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return Response({"error": "User ID does not exist in the database"}, status=404)
+        
+        try:
+            # Fetch the latest video uploaded by the user
+            media_instance = UserMedia.objects.filter(user=user, media_type='video').latest('uploaded_at')
+            media_instance.processed_video_url = video_url
+            media_instance.save()
+            return Response({"message": "Video URL saved successfully"}, status=200)
+        except UserMedia.DoesNotExist:
+            return Response({"error": "No uploaded video found for this user"}, status=404)
