@@ -94,7 +94,6 @@ class JWTUtils:
             payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"], verify=True)
 
             user_id = payload.get("id")
-            print('usrid: ',user_id)
             expiry = datetime.strptime(payload.get("expiry"), "%Y-%m-%d %H:%M:%S%z")
 
             if not user_id or expiry < get_utc_time():
