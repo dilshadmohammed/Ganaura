@@ -1,12 +1,12 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import axios from 'axios';
+import api from '../api/api';
 
 // Auth service to validate token
 const authService = {
   async validateToken(token: string): Promise<boolean> {
     try {
       // Make a request to your backend to validate the token
-      const response = await axios.get('/api/auth/validate-token', {
+      const response = await api.post('/api/user/validate-token', {
         headers: {
           Authorization: `Bearer ${token}`
         }
