@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SignUp.css';
+import api from '../../api/api';
+import toast from 'react-hot-toast';
 
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
@@ -56,9 +58,25 @@ const SignUp: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      // Add sign-up logic here
-      alert('Account created successfully!');
-      navigate('/login'); // Redirect to login page
+      toast.promise(
+        api.post('/api/user/register/', {
+          username: name,
+          email:email,
+          password: password
+          
+        }),
+        {
+          loading: 'Signing up....',
+          success: () => {
+            
+            setTimeout(() => {
+              window.location.href = '/login'; // Redirect to home after success
+            }, 2000);
+            return 'Sign Up successful! Redirecting...';
+          },
+          error: 'Error. Please try again.',
+        }
+      );
     }
   };
 

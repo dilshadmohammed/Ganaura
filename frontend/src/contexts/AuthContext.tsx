@@ -6,7 +6,7 @@ const authService = {
   async validateToken(token: string): Promise<boolean> {
     try {
       // Make a request to your backend to validate the token
-      const response = await api.post('/api/user/validate-token', {
+      const response = await api.post('/api/user/validate-token/', {
         headers: {
           Authorization: `Bearer ${token}`
         }
