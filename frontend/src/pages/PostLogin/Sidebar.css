@@ -1,0 +1,63 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -300px; /* Hide sidebar completely by default */
+  width: 300px;
+  height: 100vh;
+  background-color: #333;
+  color: #fff;
+  padding: 1rem;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease-in-out; /* Smooth sliding animation */
+  z-index: 999;
+  overflow-y: auto; /* Enable scrolling if content overflows */
+}
+
+.sidebar.open {
+  left: 0; /* Show sidebar when open */
+}
+
+
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 1000; /* Ensure it's above other content */
+}
+
+.close-button:hover {
+  opacity: 0.8;
+}
+
+/* Profile Details */
+.profile-details {
+  margin-top: 2rem;
+}
+
+.profile-details p {
+  margin: 0.5rem 0;
+}
+
+/* Generated Media Section */
+.generated-media {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.media-item img,
+.media-item video {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.media-item video {
+  background-color: #000; /* Black background for videos */
+}

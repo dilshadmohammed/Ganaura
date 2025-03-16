@@ -32,9 +32,10 @@ const Login: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      // Add login logic here
+      // Add login logic here (e.g., API call to authenticate user)
+      // For now, simulate a successful login
       alert('Login successful!');
-      navigate('/'); // Redirect to home page
+      navigate('/post-login'); // Redirect to the PostLogin page
     }
   };
 

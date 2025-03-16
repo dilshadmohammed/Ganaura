@@ -1,0 +1,198 @@
+/* General Styles */
+.post-login-page {
+  display: flex;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  position: relative;
+}
+
+/* Profile Icon (Visible only when sidebar is closed) */
+.profile-icon {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+  z-index: 1000;
+  color: #007bff; /* Blue color for the icon */
+  background-color: #fff; /* White background for the icon */
+  border-radius: 50%; /* Circular shape */
+  padding: 8px; /* Add padding for better visibility */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+}
+
+.profile-icon:hover {
+  opacity: 0.8;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -400px; /* Hide sidebar by default */
+  width: 300px;
+  height: 100vh;
+  background-color: #333;
+  color: #fff;
+  padding: 1rem;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease-in-out; /* Smooth sliding animation */
+  z-index: 999;
+  overflow-y: auto; /* Enable scrolling if content overflows */
+}
+
+.sidebar.open {
+  left: 0; /* Show sidebar when open */
+}
+
+/* Close Button */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 1000; /* Ensure it's above other content */
+}
+
+.close-button:hover {
+  opacity: 0.8;
+}
+
+/* Profile Details */
+.profile-details {
+  margin-top: 2rem;
+}
+
+.profile-details h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.profile-details p {
+  margin: 0.5rem 0;
+}
+
+/* Generated Media Section */
+.generated-media-section {
+  margin-top: 2rem;
+}
+
+.generated-media-section h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.generated-media {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.media-item img,
+.media-item video {
+  width: 100%;
+  border-radius: 8px;
+}
+
+/* Left Section (Text and Upload Section) */
+.left-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content horizontally */
+  background-color: #f0f2f5; /* Light background for the left section */
+  padding: 2rem;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: 3rem;
+  color: #333;
+  margin: 0;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow for creativity */
+}
+
+.header p {
+  font-size: 1.2rem;
+  color: #666;
+  margin: 0;
+  font-style: italic; /* Add italic style for creativity */
+}
+
+/* Upload Section */
+.upload-section {
+  text-align: center;
+  max-width: 500px; /* Limit the width of the upload section */
+}
+
+.upload-section h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Add shadow for creativity */
+}
+
+.upload-options {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.upload-button {
+  padding: 1rem 2rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for creativity */
+}
+
+.upload-button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px); /* Add hover effect for creativity */
+}
+
+.file-input {
+  display: none; /* Hide the default file input */
+}
+
+/* Generating Icon */
+.generating-icon {
+  margin-top: 1rem;
+  font-size: 1.25rem;
+  color: #007bff;
+}
+
+/* Generated Media */
+.generated-media {
+  margin-top: 2rem;
+}
+
+.generated-media img,
+.generated-media video {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Right Section (Background Image) */
+.right-section {
+  flex: 1;
+  background-image: url('/images/bg2.jpg'); /* Path to your background image */
+  background-size: cover; /* Ensure the image covers the entire section */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+}
