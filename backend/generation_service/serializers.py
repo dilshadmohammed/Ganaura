@@ -1,9 +1,11 @@
 from rest_framework import serializers
 from .models import UserMedia
+import uuid
+from user.models import User
 
 class UserMediaSerializer(serializers.ModelSerializer):
     file = serializers.FileField(write_only=True)
-    user_id = serializers.IntegerField(write_only=True)  # Accept user ID in API request
+    user_id = serializers.UUIDField(write_only=True)  # Accept UUIDs # Accept user ID in API request
     username = serializers.CharField(source="user.username", read_only=True)
 
     class Meta:

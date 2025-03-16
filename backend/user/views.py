@@ -121,3 +121,11 @@ class GetAcessToken(APIView):
             return CustomResponse(response={'accessToken': access_token, 'refreshToken': refresh_token,'expiry': access_expiry}).get_success_response()
         else:
             return CustomResponse(message="Invalid refresh token").get_unauthorized_response()
+        
+class ValidateToken(APIView):
+
+    def post(self,request):
+        if(JWTUtils.is_logged_in(request)):
+            return CustomResponse(response="Validation Successfull").get_success_response()
+        
+        
