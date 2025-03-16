@@ -35,12 +35,6 @@ const Login: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-<<<<<<< HEAD
-      // Add login logic here (e.g., API call to authenticate user)
-      // For now, simulate a successful login
-      alert('Login successful!');
-      navigate('/post-login'); // Redirect to the PostLogin page
-=======
       toast.promise(
         api.post('/api/user/auth/', {
           username: email,
@@ -58,7 +52,6 @@ const Login: React.FC = () => {
           error: 'Invalid credentials. Please try again.',
         }
       );
->>>>>>> a4ac87146d3785e6bc31f1c8eab812cb4f792c52
     }
   };
 

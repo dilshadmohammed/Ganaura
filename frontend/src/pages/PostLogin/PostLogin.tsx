@@ -4,8 +4,8 @@ import './PostLogin.css';
 
 const PostLogin: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedMedia, setGeneratedMedia] = useState<string | null>(null);
+  const [isGenerating, _setIsGenerating] = useState(false);
+  const [generatedMedia, _setGeneratedMedia] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to toggle sidebar
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,16 +14,16 @@ const PostLogin: React.FC = () => {
     }
   };
 
-  const handleUpload = () => {
-    if (file) {
-      setIsGenerating(true);
-      // Simulate processing delay
-      setTimeout(() => {
-        setIsGenerating(false);
-        setGeneratedMedia(URL.createObjectURL(file));
-      }, 3000);
-    }
-  };
+  // const handleUpload = () => {
+  //   if (file) {
+  //     setIsGenerating(true);
+  //     // Simulate processing delay
+  //     setTimeout(() => {
+  //       setIsGenerating(false);
+  //       setGeneratedMedia(URL.createObjectURL(file));
+  //     }, 3000);
+  //   }
+  // };
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen); // Toggle sidebar visibility

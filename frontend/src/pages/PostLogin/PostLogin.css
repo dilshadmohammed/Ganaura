@@ -20,6 +20,7 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
 }
 
+
 .profile-icon:hover {
   opacity: 0.8;
 }
