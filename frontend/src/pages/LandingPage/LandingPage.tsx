@@ -2,9 +2,9 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUserCircle } from 'react-icons/fa'; // Import a login icon from react-icons
 import SlidingImages from '../../components/Sliding/SlidingImages';
-import './Home.css';
+import './LandingPage.css';
 
-const Home: React.FC = () => {
+const LandingPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLoginClick = () => {
@@ -47,4 +47,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default LandingPage;

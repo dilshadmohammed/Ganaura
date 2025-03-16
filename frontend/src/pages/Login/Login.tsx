@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
+import api from '../../api/api';
+import toast from 'react-hot-toast';
+
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -32,9 +35,23 @@ const Login: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      // Add login logic here
-      alert('Login successful!');
-      navigate('/'); // Redirect to home page
+      toast.promise(
+        api.post('/api/user/auth/', {
+          username: email,
+          password: password
+        }),
+        {
+          loading: 'Logging in...',
+          success: (response) => {
+            localStorage.setItem('accessToken', response.data.response.accessToken);
+            setTimeout(() => {
+              window.location.href = '/'; // Redirect to home after success
+            }, 2000);
+            return 'Login successful! Redirecting...';
+          },
+          error: 'Invalid credentials. Please try again.',
+        }
+      );
     }
   };
 
