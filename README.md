@@ -2,7 +2,7 @@
 
 Ganaura is a web application that transforms regular images and videos into anime style art using GAN (Generative Adversarial Network) technology.
 
-![Ganaura LandingPage](https://via.placeholder.com/800x400?text=Ganaura+Anime+Converter)
+![Ganaura LandingPage](https://github.com/munawir40/Ganaura/blob/main/Landin%20Page.jpeg)
 
 ## Project Overview
 
