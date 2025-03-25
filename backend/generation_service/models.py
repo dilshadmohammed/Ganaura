@@ -24,9 +24,8 @@ class UserMedia(models.Model):
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="media_uploads")
     file = models.FileField(upload_to=user_media_path)
-    media_type = models.CharField(max_length=10, choices=MEDIA_TYPE_CHOICES, editable=False)
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    processed_video_url = models.URLField(blank=True, null=True)  # New field to store processed video URL
+    media_type = models.CharField(max_length=10, choices=MEDIA_TYPE_CHOICES, editable=False)
 
     def save(self, *args, **kwargs):
         """Automatically determine if the uploaded file is an image or a video."""
@@ -41,3 +40,13 @@ class UserMedia(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.media_type} - {self.file.name}"
+    
+class CloudMedia(models.Model):
+    MEDIA_TYPE_CHOICES = [
+        ('image', 'Image'),
+        ('video', 'Video'),
+    ]
+    user_media = models.ForeignKey(UserMedia, on_delete=models.CASCADE, related_name="processed")
+    media_type = models.CharField(max_length=10, choices=MEDIA_TYPE_CHOICES, editable=False)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    media_url = models.URLField(blank=True, null=True) 
