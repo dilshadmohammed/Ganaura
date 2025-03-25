@@ -40,7 +40,8 @@ class CloudMediaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CloudMedia
-        fields = ['user_id', 'media_url', 'media_type']
+        fields = ['id','user_id', 'media_url', 'media_type']
+        read_only_fields = ['id']
 
     def validate_user_id(self, value):
         """Check if user exists."""

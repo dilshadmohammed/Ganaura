@@ -86,3 +86,32 @@ class SaveVideoUrl(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+
+class UserGallery(APIView):
+    authentication_classes = [JWTAuth]
+
+    def get(self, request):
+        user = JWTUtils.fetch_user_id(request)
+        cloud_media_entries = CloudMedia.objects.filter(user_media__user=user)
+        serializer = CloudMediaSerializer(cloud_media_entries, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def delete(self, request):
+
+        user_id = JWTUtils.fetch_user_id(request)
+        media_id = request.data.get("id") 
+
+        if not media_id:
+            return Response({"error": "Media ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            cloud_media = CloudMedia.objects.get(id=media_id, user_media__user_id=user_id)
+            cloud_media.delete()
+
+            # Add logic to delete from the cloud
+            
+            return Response({"message": "Media deleted successfully"}, status=status.HTTP_200_OK)
+
+        except CloudMedia.DoesNotExist:
+            return Response({"error": "Media not found or does not belong to the user"}, status=status.HTTP_404_NOT_FOUND)

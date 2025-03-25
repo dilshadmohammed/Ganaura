@@ -21,7 +21,7 @@ class UserMedia(models.Model):
         ('image', 'Image'),
         ('video', 'Video'),
     ]
-    
+    id = models.CharField(primary_key=True, max_length=36, default=uuid.uuid4)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="media_uploads")
     file = models.FileField(upload_to=user_media_path)
     uploaded_at = models.DateTimeField(auto_now_add=True)
