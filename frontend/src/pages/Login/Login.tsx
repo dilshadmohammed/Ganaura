@@ -45,7 +45,7 @@ const Login: React.FC = () => {
           success: (response) => {
             localStorage.setItem('accessToken', response.data.response.accessToken);
             setTimeout(() => {
-              window.location.href = '/'; // Redirect to home after success
+              window.location.href = '/home'; // Redirect to home after success
             }, 2000);
             return 'Login successful! Redirecting...';
           },

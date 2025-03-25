@@ -8,11 +8,11 @@ const LandingPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLoginClick = () => {
-    navigate('/login'); // Redirect to the login page
+    navigate('/home'); // Redirect to the login page
   };
 
   const handleGetStartedClick = () => {
-    navigate('/get-started'); // Redirect to the get started page
+    navigate('/home'); // Redirect to the get started page
   };
 
   return (

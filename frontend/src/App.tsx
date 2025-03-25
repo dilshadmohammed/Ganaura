@@ -7,8 +7,8 @@ import SignUp from './pages/SignUp/SignUp';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import PostLogin from './pages/PostLogin/PostLogin';
-import Profile from './pages/PostLogin/Profile';
+import Home from './pages/Home/Home';
+import Profile from './pages/Home/Profile';
 
 const App: React.FC = () => {
   return (
@@ -17,11 +17,11 @@ const App: React.FC = () => {
       <Router>
         <Routes>
           {/* Protected Home route */}
-          <Route path="/" element={<ProtectedRoute element={<LandingPage />} />} />
-          <Route path="/post-login" element={<ProtectedRoute element={<PostLogin />} />} />
+          <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
           <Route path="/profile" element={<ProtectedRoute element={<Profile />} />} />
 
           {/* Public routes */}
+          <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/signup" element={<SignUp />} />

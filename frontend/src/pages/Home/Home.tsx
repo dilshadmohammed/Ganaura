@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaUserCircle } from 'react-icons/fa'; // Import a user icon
-import './PostLogin.css';
+import './Home.css';
 
 const PostLogin: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
