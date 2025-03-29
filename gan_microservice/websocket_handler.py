@@ -1,12 +1,13 @@
 # websocket_handler.py
 from fastapi import WebSocket, WebSocketDisconnect
 from typing import Dict
+from utils import JWTUtils
 
 active_connections: Dict[str, WebSocket] = {}
 
 async def websocket_endpoint(websocket: WebSocket):
     token = websocket.query_params.get("token")
-    user_id = "test_user"  # Replace with JWTUtils.fetch_user_id_ws(token) if using JWT
+    user_id = JWTUtils.fetch_user_id_ws(token)
     if not user_id:
         await websocket.close(code=4001)
         return

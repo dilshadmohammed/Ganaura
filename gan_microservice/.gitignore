@@ -1,3 +1,7 @@
 .ganvenv/
 __pycache__/
 .env
+downloads/
+generation_outputs/
+Ganaura_test.onnx
+
