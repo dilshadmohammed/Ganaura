@@ -1,129 +1,130 @@
-import React, { useState } from 'react';
-import { FaUserCircle } from 'react-icons/fa'; // Import a user icon
+import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FaBars, FaImage, FaVideo, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
 import './Home.css';
 
-const PostLogin: React.FC = () => {
-  const [file, setFile] = useState<File | null>(null);
-  const [isGenerating, _setIsGenerating] = useState(false);
-  const [generatedMedia, _setGeneratedMedia] = useState<string | null>(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to toggle sidebar
+const Home: React.FC = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navigate = useNavigate();
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    navigate('/login');
+  };
+
+  const handleImageUploadClick = () => {
+    imageInputRef.current?.click();
+  };
+
+  const handleVideoUploadClick = () => {
+    videoInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'image' | 'video') => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      // Here you would typically upload the file to your server
+      console.log(`Selected ${type}:`, file.name);
+      alert(`Selected ${type}: ${file.name}\n(Upload functionality would be implemented here)`);
+      
+      // Reset the input after selection
+      e.target.value = '';
     }
   };
 
-  // const handleUpload = () => {
-  //   if (file) {
-  //     setIsGenerating(true);
-  //     // Simulate processing delay
-  //     setTimeout(() => {
-  //       setIsGenerating(false);
-  //       setGeneratedMedia(URL.createObjectURL(file));
-  //     }, 3000);
-  //   }
-  // };
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen); // Toggle sidebar visibility
-  };
-
   return (
-    <div className="post-login-page">
-      {/* Profile Icon (Visible only when sidebar is closed) */}
-      {!isSidebarOpen && (
-        <div className="profile-icon" onClick={toggleSidebar}>
-          <FaUserCircle size={32} />
+    <div className="home-container">
+      {/* Hidden file inputs */}
+      <input
+        type="file"
+        ref={imageInputRef}
+        onChange={(e) => handleFileChange(e, 'image')}
+        accept="image/*"
+        style={{ display: 'none' }}
+      />
+      <input
+        type="file"
+        ref={videoInputRef}
+        onChange={(e) => handleFileChange(e, 'video')}
+        accept="video/*"
+        style={{ display: 'none' }}
+      />
+      
+      {/* Background Image */}
+      <div className="background-image"></div>
+      
+      {/* Top Navigation Bar */}
+      <div className="top-nav">
+        <button className="menu-button" onClick={toggleSidebar}>
+          <FaBars />
+        </button>
+        <div className="user-profile" onClick={() => setSidebarOpen(true)}>
+          <FaUserCircle size={24} />
         </div>
-      )}
+      </div>
 
       {/* Sidebar */}
-      <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-        <button className="close-button" onClick={toggleSidebar}>
-          &times; {/* Close icon */}
-        </button>
-
-        {/* Profile Details */}
-        <div className="profile-details">
-          <h2>Profile Details</h2>
-          <p><strong>Name:</strong> John Doe</p>
-          <p><strong>Email:</strong> john.doe@example.com</p>
+      <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+        <div className="sidebar-header">
+          <FaUserCircle size={48} />
+          <h3>User Profile</h3>
+          <button className="close-sidebar" onClick={toggleSidebar}>
+            &times;
+          </button>
         </div>
-
-        {/* Generated Media */}
-        <div className="generated-media-section">
-          <h3>Generated Media</h3>
-          <div className="generated-media">
-            {generatedMedia && (
-              <div className="media-item">
-                {file?.type.startsWith('image') ? (
-                  <img src={generatedMedia} alt="Generated Image" />
-                ) : (
-                  <video controls>
-                    <source src={generatedMedia} type={file?.type} />
-                    Your browser does not support the video tag.
-                  </video>
-                )}
-              </div>
-            )}
+        
+        <div className="sidebar-menu">
+          <div className="menu-section">
+            <h4>Generated Content</h4>
+            <button className="menu-item">
+              <FaImage /> My Images
+            </button>
+            <button className="menu-item">
+              <FaVideo /> My Videos
+            </button>
           </div>
+          
+          <button className="logout-button" onClick={handleLogout}>
+            <FaSignOutAlt /> Logout
+          </button>
         </div>
       </div>
 
-      {/* Left Section (Text and Upload Section) */}
-      <div className="left-section">
-        {/* Header */}
-        <header className="header">
-          <h1>GANAURA</h1>
-          <p>anime maker</p>
-        </header>
-
-        {/* Upload Section */}
-        <div className="upload-section">
-          <h2>UPLOAD IMAGE OR VIDEO</h2>
-          <div className="upload-options">
-            <label className="upload-button">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="file-input"
-              />
-              UPLOAD IMAGE
-            </label>
-            <label className="upload-button">
-              <input
-                type="file"
-                accept="video/*"
-                onChange={handleFileChange}
-                className="file-input"
-              />
-              UPLOAD VIDEO
-            </label>
-          </div>
-
-          {isGenerating && <div className="generating-icon">Generating...</div>}
-
-          {generatedMedia && (
-            <div className="generated-media">
-              {file?.type.startsWith('image') ? (
-                <img src={generatedMedia} alt="Generated Image" />
-              ) : (
-                <video controls>
-                  <source src={generatedMedia} type={file?.type} />
-                  Your browser does not support the video tag.
-                </video>
-              )}
-            </div>
-          )}
+      {/* Main Content */}
+      <div className="main-content">
+        <h1 className="app-title">GANAURA</h1>
+        <h2 className="app-subtitle">Your Anime Dreams, Realized. Upload & Animate!</h2>
+        
+        <div className="upload-options">
+          <button 
+            className="upload-button"
+            onClick={handleImageUploadClick}
+          >
+            <FaImage size={48} />
+            <span>UPLOAD IMAGE</span>
+          </button>
+          <button 
+            className="upload-button"
+            onClick={handleVideoUploadClick}
+          >
+            <FaVideo size={48} />
+            <span>UPLOAD VIDEO</span>
+          </button>
         </div>
       </div>
 
-      {/* Right Section (Background Image) */}
-      <div className="right-section"></div>
+      {/* Overlay for sidebar */}
+      {sidebarOpen && <div className="overlay" onClick={toggleSidebar}></div>}
     </div>
   );
 };
 
-export default PostLogin;
+export default Home;

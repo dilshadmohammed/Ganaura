@@ -1,199 +1,233 @@
 /* General Styles */
-.post-login-page {
+.home-container {
   display: flex;
+  flex-direction: column;
   height: 100vh;
-  font-family: Arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
   position: relative;
+  overflow: hidden;
 }
 
-/* Profile Icon (Visible only when sidebar is closed) */
-.profile-icon {
-  position: fixed;
-  top: 20px;
-  left: 20px;
+/* Background Image */
+.background-image {
+  position: absolute;
+  top: 100;
+  left: 100;
+  right: 100;
+  bottom: 100;
+  width: 100%;
+  height: 100%;
+  background-image: url('/images/bg1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(0.7);
+  z-index: -1;
+}
+
+/* Top Navigation Bar */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  z-index: 100;
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
   cursor: pointer;
-  z-index: 1000;
-  color: #007bff; /* Blue color for the icon */
-  background-color: #fff; /* White background for the icon */
-  border-radius: 50%; /* Circular shape */
-  padding: 8px; /* Add padding for better visibility */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
 }
 
-
-.profile-icon:hover {
-  opacity: 0.8;
+.user-profile {
+  cursor: pointer;
 }
 
 /* Sidebar */
 .sidebar {
   position: fixed;
   top: 0;
-  left: -400px; /* Hide sidebar by default */
+  left: -300px;
   width: 300px;
-  height: 100vh;
-  background-color: #333;
-  color: #fff;
-  padding: 1rem;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  transition: left 0.3s ease-in-out; /* Smooth sliding animation */
-  z-index: 999;
-  overflow-y: auto; /* Enable scrolling if content overflows */
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  transition: left 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(5px);
 }
 
 .sidebar.open {
-  left: 0; /* Show sidebar when open */
+  left: 0;
 }
 
-/* Close Button */
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 1.5rem;
-  cursor: pointer;
-  z-index: 1000; /* Ensure it's above other content */
-}
-
-.close-button:hover {
-  opacity: 0.8;
-}
-
-/* Profile Details */
-.profile-details {
-  margin-top: 2rem;
-}
-
-.profile-details h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.profile-details p {
-  margin: 0.5rem 0;
-}
-
-/* Generated Media Section */
-.generated-media-section {
-  margin-top: 2rem;
-}
-
-.generated-media-section h3 {
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
-}
-
-.generated-media {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 1rem;
-}
-
-.media-item img,
-.media-item video {
-  width: 100%;
-  border-radius: 8px;
-}
-
-/* Left Section (Text and Upload Section) */
-.left-section {
-  flex: 1;
+.sidebar-header {
+  padding: 2rem;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Center content vertically */
-  align-items: center; /* Center content horizontally */
-  background-color: #f0f2f5; /* Light background for the left section */
-  padding: 2rem;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid #444;
 }
 
-/* Header */
-.header {
-  text-align: center;
+.close-sidebar {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.sidebar-menu {
+  padding: 1rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-section {
   margin-bottom: 2rem;
 }
 
-.header h1 {
-  font-size: 3rem;
-  color: #333;
-  margin: 0;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow for creativity */
+.menu-section h4 {
+  color: #aaa;
+  margin-bottom: 1rem;
+  padding-left: 0.5rem;
 }
 
-.header p {
-  font-size: 1.2rem;
-  color: #666;
-  margin: 0;
-  font-style: italic; /* Add italic style for creativity */
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
 }
 
-/* Upload Section */
-.upload-section {
+.menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: none;
+  border: none;
+  color: #ff6b6b;
+  text-align: left;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: auto;
+  margin-bottom: 2rem;
+}
+
+.logout-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Main Content */
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
   text-align: center;
-  max-width: 500px; /* Limit the width of the upload section */
 }
 
-.upload-section h2 {
-  font-size: 1.5rem;
-  color: #333;
-  margin-bottom: 1.5rem;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Add shadow for creativity */
+.app-title {
+  font-size: 4rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.app-subtitle {
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: white;
+  margin-bottom: 3rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .upload-options {
   display: flex;
-  gap: 1rem;
-  justify-content: center;
-}
-
-.upload-button {
-  padding: 1rem 2rem;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for creativity */
-}
-
-.upload-button:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px); /* Add hover effect for creativity */
-}
-
-.file-input {
-  display: none; /* Hide the default file input */
-}
-
-/* Generating Icon */
-.generating-icon {
-  margin-top: 1rem;
-  font-size: 1.25rem;
-  color: #007bff;
-}
-
-/* Generated Media */
-.generated-media {
+  gap: 2rem;
   margin-top: 2rem;
 }
 
-.generated-media img,
-.generated-media video {
-  max-width: 100%;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.upload-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 200px;
+  height: 200px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 10px;
+  color: #333;
+  font-weight: 600;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Right Section (Background Image) */
-.right-section {
-  flex: 1;
-  background-image: url('/images/bg2.jpg'); /* Path to your background image */
-  background-size: cover; /* Ensure the image covers the entire section */
-  background-position: center; /* Center the image */
-  background-repeat: no-repeat; /* Prevent the image from repeating */
+.upload-button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .app-title {
+    font-size: 3rem;
+  }
+  
+  .app-subtitle {
+    font-size: 1.4rem;
+  }
+  
+  .upload-options {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 250px;
+    left: -250px;
+  }
 }
