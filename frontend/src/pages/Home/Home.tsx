@@ -1,13 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaBars, FaImage, FaVideo, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
+import { FaBars, FaUpload, FaUserCircle, FaSignOutAlt, FaImage, FaVideo } from 'react-icons/fa';
 import './Home.css';
 
 const Home: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [uploadOptionsVisible, setUploadOptionsVisible] = useState(false);
   const navigate = useNavigate();
-  const imageInputRef = useRef<HTMLInputElement>(null);
-  const videoInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const toggleSidebar = () => {
@@ -19,67 +19,90 @@ const Home: React.FC = () => {
     navigate('/login');
   };
 
-  const handleImageUploadClick = () => {
-    imageInputRef.current?.click();
+  const toggleUploadOptions = () => {
+    setUploadOptionsVisible(!uploadOptionsVisible);
   };
 
-  const handleVideoUploadClick = () => {
-    videoInputRef.current?.click();
+  const handleFileSelect = (type: 'image' | 'video') => {
+    if (fileInputRef.current) {
+      fileInputRef.current.accept = type === 'image' ? 'image/*' : 'video/*';
+      fileInputRef.current.click();
+    }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'image' | 'video') => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
       // Here you would typically upload the file to your server
-      console.log(`Selected ${type}:`, file.name);
-      alert(`Selected ${type}: ${file.name}\n(Upload functionality would be implemented here)`);
+      console.log(`Selected file:`, file.name);
       
       // Reset the input after selection
       e.target.value = '';
+      setUploadOptionsVisible(false);
+      
+      // Show upload confirmation
+      const fileType = file.type.startsWith('image/') ? 'image' : 'video';
+      alert(`Selected ${fileType}: ${file.name}\n(Upload functionality would be implemented here)`);
     }
   };
 
   return (
     <div className="home-container">
-      {/* Hidden file inputs */}
+      {/* Hidden file input */}
       <input
         type="file"
-        ref={imageInputRef}
-        onChange={(e) => handleFileChange(e, 'image')}
-        accept="image/*"
-        style={{ display: 'none' }}
-      />
-      <input
-        type="file"
-        ref={videoInputRef}
-        onChange={(e) => handleFileChange(e, 'video')}
-        accept="video/*"
+        ref={fileInputRef}
+        onChange={handleFileChange}
         style={{ display: 'none' }}
       />
       
-      {/* Background Image */}
+      {/* Background Image with gradient overlay */}
       <div className="background-image"></div>
+      <div className="gradient-overlay"></div>
       
       {/* Top Navigation Bar */}
       <div className="top-nav">
-        <button className="menu-button" onClick={toggleSidebar}>
-          <FaBars />
-        </button>
-        <div className="user-profile" onClick={() => setSidebarOpen(true)}>
-          <FaUserCircle size={24} />
+        <div className="logo">GANAURA</div>
+        <div className="nav-actions">
+          <button className="menu-button" onClick={toggleSidebar}>
+            <FaBars />
+          </button>
+          <div className="user-profile" onClick={() => setSidebarOpen(true)}>
+            <FaUserCircle size={24} />
+          </div>
         </div>
       </div>
 
       {/* Sidebar */}
       <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
-          <FaUserCircle size={48} />
+          <FaUserCircle size={64} />
           <h3>User Profile</h3>
+          <p>user@example.com</p>
           <button className="close-sidebar" onClick={toggleSidebar}>
             &times;
           </button>
         </div>
+        {/* Overlay only for sidebar */}
+{sidebarOpen && (
+  <div 
+    className="overlay" 
+    onClick={() => {
+      setSidebarOpen(false);
+    }}
+  ></div>
+)}
+
+{/* Separate handling for upload dropdown without full overlay */}
+{uploadOptionsVisible && (
+  <div 
+    className="upload-dropdown-backdrop" 
+    onClick={() => {
+      setUploadOptionsVisible(false);
+    }}
+  ></div>
+)}
         
         <div className="sidebar-menu">
           <div className="menu-section">
@@ -100,29 +123,71 @@ const Home: React.FC = () => {
 
       {/* Main Content */}
       <div className="main-content">
-        <h1 className="app-title">GANAURA</h1>
-        <h2 className="app-subtitle">Your Anime Dreams, Realized. Upload & Animate!</h2>
+        <div className="hero-content">
+          <h1 className="app-title">GANAURA</h1>
+          <h2 className="app-subtitle">Your Anime Dreams, Realized</h2>
+          <p className="app-description">
+            Transform your ordinary images and videos into stunning anime art with our AI-powered technology
+          </p>
+          
+          <div className="upload-container">
+            <button 
+              className="main-upload-button"
+              onClick={toggleUploadOptions}
+            >
+              <FaUpload size={24} />
+              <span>START CREATING</span>
+            </button>
+            
+            {uploadOptionsVisible && (
+              <div className="upload-dropdown">
+                <button 
+                  className="upload-option"
+                  onClick={() => handleFileSelect('image')}
+                >
+                  <FaImage size={20} />
+                  <span>Upload Image</span>
+                </button>
+                <button 
+                  className="upload-option"
+                  onClick={() => handleFileSelect('video')}
+                >
+                  <FaVideo size={20} />
+                  <span>Upload Video</span>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
         
-        <div className="upload-options">
-          <button 
-            className="upload-button"
-            onClick={handleImageUploadClick}
-          >
-            <FaImage size={48} />
-            <span>UPLOAD IMAGE</span>
-          </button>
-          <button 
-            className="upload-button"
-            onClick={handleVideoUploadClick}
-          >
-            <FaVideo size={48} />
-            <span>UPLOAD VIDEO</span>
-          </button>
+        <div className="features-section">
+          <div className="feature-card">
+            <div className="feature-icon">
+              <FaImage size={32} />
+            </div>
+            <h3>Image to Anime</h3>
+            <p>Transform your photos into beautiful anime artwork</p>
+          </div>
+          <div className="feature-card">
+            <div className="feature-icon">
+              <FaVideo size={32} />
+            </div>
+            <h3>Video Animation</h3>
+            <p>Convert your videos into stunning anime sequences</p>
+          </div>
         </div>
       </div>
 
-      {/* Overlay for sidebar */}
-      {sidebarOpen && <div className="overlay" onClick={toggleSidebar}></div>}
+      {/* Overlay for sidebar and upload options */}
+      {(sidebarOpen || uploadOptionsVisible) && (
+        <div 
+          className="overlay" 
+          onClick={() => {
+            setSidebarOpen(false);
+            setUploadOptionsVisible(false);
+          }}
+        ></div>
+      )}
     </div>
   );
 };

@@ -8,20 +8,32 @@
   overflow: hidden;
 }
 
-/* Background Image */
+/* Background Image with Gradient Overlay */
 .background-image {
   position: absolute;
-  top: 100;
-  left: 100;
-  right: 100;
-  bottom: 100;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   width: 100%;
   height: 100%;
   background-image: url('/images/bg1.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  filter: brightness(0.7);
+  filter: brightness(0.8);
+  z-index: -2;
+}
+
+.gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(76, 0, 130, 0.7) 0%, rgba(25, 25, 112, 0.7) 100%);
   z-index: -1;
 }
 
@@ -30,10 +42,28 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: rgba(0, 0, 0, 0.7);
+  padding: 1.2rem 2.5rem;
+  background-color: rgba(0, 0, 0, 0.6);
   color: white;
   z-index: 100;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(45deg, #ff6b6b, #ffb347);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 1px;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
 }
 
 .menu-button {
@@ -42,26 +72,37 @@
   color: white;
   font-size: 1.5rem;
   cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.menu-button:hover {
+  transform: scale(1.1);
 }
 
 .user-profile {
   cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.user-profile:hover {
+  transform: scale(1.1);
 }
 
 /* Sidebar */
 .sidebar {
   position: fixed;
   top: 0;
-  left: -300px;
-  width: 300px;
+  left: -350px;
+  width: 350px;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(15, 15, 30, 0.95);
   color: white;
   transition: left 0.3s ease;
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(10px);
+  box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3);
 }
 
 .sidebar.open {
@@ -69,40 +110,60 @@
 }
 
 .sidebar-header {
-  padding: 2rem;
+  padding: 2.5rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  border-bottom: 1px solid #444;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(to bottom, rgba(76, 0, 130, 0.4), transparent);
+}
+
+.sidebar-header h3 {
+  margin: 0.5rem 0 0.2rem;
+  font-weight: 600;
+}
+
+.sidebar-header p {
+  margin: 0;
+  color: #aaa;
+  font-size: 0.9rem;
 }
 
 .close-sidebar {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 1.2rem;
+  right: 1.2rem;
   background: none;
   border: none;
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.close-sidebar:hover {
+  transform: scale(1.1);
 }
 
 .sidebar-menu {
-  padding: 1rem;
+  padding: 1.5rem;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
 
 .menu-section {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .menu-section h4 {
   color: #aaa;
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
   padding-left: 0.5rem;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .menu-item {
@@ -110,18 +171,21 @@
   align-items: center;
   gap: 1rem;
   width: 100%;
-  padding: 0.8rem 1rem;
+  padding: 1rem 1.2rem;
   background: none;
   border: none;
   color: white;
   text-align: left;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
+  transition: all 0.2s ease;
+  font-size: 1rem;
 }
 
 .menu-item:hover {
   background-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(5px);
 }
 
 .logout-button {
@@ -129,19 +193,22 @@
   align-items: center;
   gap: 1rem;
   width: 100%;
-  padding: 0.8rem 1rem;
+  padding: 1rem 1.2rem;
   background: none;
-  border: none;
+  border: 1px solid rgba(255, 107, 107, 0.3);
   color: #ff6b6b;
   text-align: left;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   margin-top: auto;
   margin-bottom: 2rem;
+  transition: all 0.2s ease;
 }
 
 .logout-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 107, 107, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(255, 107, 107, 0.2);
 }
 
 /* Main Content */
@@ -149,56 +216,159 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
+  padding: 0;
   text-align: center;
 }
 
-.app-title {
-  font-size: 4rem;
-  font-weight: 700;
-  color: white;
-  margin-bottom: 0.5rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.app-subtitle {
-  font-size: 1.8rem;
-  font-weight: 400;
-  color: white;
-  margin-bottom: 3rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.upload-options {
-  display: flex;
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-.upload-button {
+.hero-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 4rem 2rem;
+  min-height: 60vh;
+}
+
+.app-title {
+  font-size: 5rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(45deg, #ff6b6b, #ffb347);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 2px;
+}
+
+.app-subtitle {
+  font-size: 2rem;
+  font-weight: 400;
+  color: white;
+  margin-bottom: 1.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.app-description {
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin-bottom: 3rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.upload-container {
+  position: relative;
+  margin-top: 1rem;
+}
+
+.main-upload-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 1rem;
-  width: 200px;
-  height: 200px;
-  background-color: rgba(255, 255, 255, 0.9);
+  padding: 1.2rem 2.5rem;
+  background: linear-gradient(45deg, #ff6b6b, #ffb347);
   border: none;
-  border-radius: 10px;
-  color: #333;
+  border-radius: 50px;
+  color: white;
   font-weight: 600;
   font-size: 1.2rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.upload-button:hover {
+.main-upload-button:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.6);
+}
+
+.upload-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  margin-top: 1rem;
+  background-color: rgba(30, 30, 45, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.upload-option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.upload-option:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.upload-option:first-child {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Features Section */
+.features-section {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  padding: 2rem;
+  margin-top: auto;
+}
+
+.feature-card {
+  width: 220px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, rgba(255, 107, 107, 0.2), rgba(255, 179, 71, 0.2));
+  margin: 0 auto 1.5rem;
+  color: #ffb347;
+}
+
+.feature-card h3 {
+  font-size: 1.2rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.feature-card p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 /* Overlay */
@@ -208,26 +378,137 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(3px);
   z-index: 999;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .top-nav {
+    padding: 1rem 1.5rem;
+  }
+  
   .app-title {
-    font-size: 3rem;
+    font-size: 3.5rem;
   }
   
   .app-subtitle {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
   
-  .upload-options {
+  .app-description {
+    font-size: 1rem;
+    padding: 0 1rem;
+  }
+  
+  .main-upload-button {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+  
+  .features-section {
     flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  .feature-card {
+    width: 90%;
+    max-width: 280px;
   }
   
   .sidebar {
-    width: 250px;
-    left: -250px;
+    width: 280px;
+    left: -280px;
   }
+}
+
+@media (max-width: 480px) {
+  .app-title {
+    font-size: 2.8rem;
+  }
+  
+  .app-subtitle {
+    font-size: 1.3rem;
+  }
+  
+  .hero-content {
+    padding: 3rem 1rem;
+  }
+}
+/* Make sure the dropdown stays above the backdrop */
+.upload-dropdown {
+  z-index: 991;
+}
+/* Lighter backdrop for upload dropdown that doesn't blur the entire interface */
+.upload-dropdown-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: transparent;
+  z-index: 990;
+}
+/* Make sure the dropdown stays above the backdrop */
+/* Position the upload dropdown properly */
+.upload-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  margin-top: 10px;
+  z-index: 1000; /* Even higher z-index to ensure it's on top */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Make the upload options visible and styled */
+.upload-option {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: white;
+  border: none;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  color: #333;
+  font-weight: 500;
+  text-align: left;
+}
+
+.upload-option:last-child {
+  border-bottom: none;
+}
+
+.upload-option:hover {
+  background-color: #f7f7f7;
+}
+
+.upload-option span {
+  margin-left: 10px;
+}
+
+/* Make sure the container has proper positioning */
+.upload-container {
+  position: relative;
+  margin: 20px auto;
+}
+
+/* Ensure backdrop is working properly */
+.upload-dropdown-backdrop,
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 990;
 }
