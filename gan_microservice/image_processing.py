@@ -39,18 +39,10 @@ def save_images(images, image_path, size):
     images = cv2.resize(images, size)
     cv2.imwrite(image_path, cv2.cvtColor(images, cv2.COLOR_RGB2BGR))
 
-async def process_images(task_id, user_id, input_imgs_path, output_path, model_path="model path here", device="cpu"):
+async def process_images(task_id, user_id, input_path, output_path, model_path="model path here", device="cpu"):
     print(f"Image processing started for user {user_id}, task {task_id}")
-    temp_dir = tempfile.mkdtemp()
-    result_dir = check_folder(os.path.join(temp_dir, "output"))
     
     try:
-        test_files = glob(f'{input_imgs_path}/*.*')
-        test_files = [x for x in test_files if os.path.splitext(x)[-1] in pic_form]
-        
-        if not test_files:
-            raise ValueError("No valid images found in the input directory.")
-        
         if ort.get_device() == 'GPU' and device == "gpu":
             session = ort.InferenceSession(model_path, providers=['CUDAExecutionProvider', 'CPUExecutionProvider'])
         else:
@@ -58,23 +50,11 @@ async def process_images(task_id, user_id, input_imgs_path, output_path, model_p
         
         x = session.get_inputs()[0].name
         y = session.get_outputs()[0].name
-        
-        total_files = len(test_files)
-        for i, sample_file in enumerate(test_files):
-            sample_image, shape = load_test_data(sample_file, model_path)
-            image_path = os.path.join(result_dir, os.path.basename(sample_file))
-            fake_img = session.run(None, {x: sample_image})
-            save_images(fake_img[0], image_path, (shape[1], shape[0]))
-            
-            progress = int((i + 1) / total_files * 100)
-            websocket = active_connections.get(user_id)
-            if websocket:
-                await websocket.send_json({
-                    "progress": progress,
-                    "task_id": task_id,
-                    "processed_image": os.path.basename(sample_file)
-                })
-            await asyncio.sleep(0.1)
+
+        sample_image, shape = load_test_data(input_path, model_path)
+        image_path = os.path.join(output_path, os.path.basename(input_path))
+        fake_img = session.run(None, {x: sample_image})
+        save_images(fake_img[0], image_path, (shape[1], shape[0]))
     
     except Exception as e:
         print(f"Error in process_images: {e}")
@@ -84,6 +64,3 @@ async def process_images(task_id, user_id, input_imgs_path, output_path, model_p
                 "error": str(e),
                 "task_id": task_id,
             })
-    
-    finally:
-        shutil.rmtree(temp_dir, ignore_errors=True)

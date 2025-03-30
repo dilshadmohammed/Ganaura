@@ -49,33 +49,27 @@ class GenerateVideo(APIView):
         Handles media upload and sends videos to FastAPI
         """
         user_id = JWTUtils.fetch_user_id(request)  # Fetch user ID from JWT
-        video_file = request.FILES.get("file") 
+        file = request.FILES.get("file") 
 
-        if not video_file:
-            return Response({"error": "No file provided"}, status=400)
 
         # Save file using serializer
-        serializer = UserMediaSerializer(data={"user_id": user_id, "file": video_file})
+        serializer = UserMediaSerializer(data={"user_id": user_id, "file": file})
         if serializer.is_valid():
             media_instance = serializer.save()
+            response = requests.post(FASTAPI_URL, data={
+                "user_id": user_id,
+                "media_path": f'http://localhost:8000/api/gan{media_instance.file.url}',
+                "media_type" : media_instance.media_type
+            })
 
-            if media_instance.media_type == "video":
-                # Send video to FastAPI for processing
-                response = requests.post(FASTAPI_URL, data={
-                    "user_id": user_id,
-                    "video_path": media_instance.file.path
-                })
-
-                if response.status_code == 200:
-                    return Response({"message": "Video uploaded and sent for processing", "media": serializer.data})
-                else:
-                    return Response({"error": "FastAPI processing failed"}, status=500)
-
-            return Response(serializer.data, status=201)
+            if response.status_code == 200:
+                return Response({"message": "Video uploaded and sent for processing", "media": serializer.data})
+            else:
+                return Response({"error": "FastAPI processing failed"}, status=500)
 
         return Response(serializer.errors, status=400)
     
-class SaveVideoUrl(APIView):
+class SaveMediaUrl(APIView):
     def post(self, request):
         serializer = CloudMediaSerializer(data=request.data)
 

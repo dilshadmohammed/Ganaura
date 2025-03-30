@@ -8,7 +8,12 @@ import threading
 import os
 import asyncio
 import subprocess
+import requests
 from websocket_handler import active_connections
+from s3api import upload_to_cloud
+
+DJANGO_API_URL = 'http://127.0.0.1:8000/api/gan/save-media/'
+FASTAPI_SECRET = "absdfasasdfasf"
 
 video_form = ['.mp4', '.avi', '.mov', '.mkv']
 
@@ -115,18 +120,61 @@ class Cartoonizer:
             if websocket:
                 await websocket.send_json({
                     "progress": progress,
-                    "task_id": task_id,
-                    "processed_frame": i + 1
+                    "task_id": str(task_id),
                 })
             await asyncio.sleep(0.01)
 
         video_writer.release()
-
         try:
             sound_path = os.path.join(self.output_dir, "sound.mp3")
             subprocess.check_call(["ffmpeg", "-loglevel", "error", "-i", self.video_path, "-y", sound_path])
             subprocess.check_call(["ffmpeg", "-loglevel", "error", "-i", sound_path, "-i", output_video_path, "-y", "-c:v", "libx264", "-c:a", "copy", "-crf", "25", output_video_sounds_path])
-            return output_video_sounds_path
+            final= output_video_sounds_path
         except:
             print("FFmpeg failed, returning silent video.")
-            return output_video_path
+            final = output_video_path
+        
+        media_url = upload_to_cloud(final)
+        response = requests.post(
+            DJANGO_API_URL,
+            headers={"FastAPI-Secret": FASTAPI_SECRET},
+            json={
+                "user_id": user_id,
+                "media_type": 'video',
+                "media_url": media_url,
+            }
+        )
+        self.cleanup_files(self.video_path, output_video_path, sound_path, output_video_sounds_path)
+        
+        return media_url
+        
+        
+    def cleanup_files(self, input_video_path, output_video_path, sound_path, output_video_sounds_path):
+        """
+        Clean up temporary and intermediate files.
+        
+        Args:
+            input_video_path (str): Path to the original input video
+            output_video_path (str): Path to the output video without sound
+            sound_path (str): Path to the extracted sound file
+            output_video_sounds_path (str): Path to the output video with sound
+        """
+        files_to_delete = [
+            input_video_path,  # Delete input video from downloads folder
+            output_video_path,  # Delete output video without sound
+            sound_path,  # Delete extracted sound file
+        ]
+
+        # If a video with sound was created, delete it as well
+        if output_video_sounds_path != output_video_path:
+            files_to_delete.append(output_video_sounds_path)
+
+        # Attempt to delete each file
+        for file_path in files_to_delete:
+            try:
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+                    print(f"Deleted: {file_path}")
+            except Exception as e:
+                print(f"Error deleting {file_path}: {e}")
+
