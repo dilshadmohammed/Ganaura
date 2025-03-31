@@ -1,7 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaBars, FaUpload, FaUserCircle, FaSignOutAlt, FaImage, FaVideo } from 'react-icons/fa';
+import { FaBars, FaUpload, FaUserCircle, FaImage, FaVideo } from 'react-icons/fa';
+import ProfileSidebar from '../Home/ProfileSidebar';
+import FileProcessing from '../Home/FileProcessing';
 import './Home.css';
+import './DropdownMenu.css';
 
 const Home: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -9,6 +12,15 @@ const Home: React.FC = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [fileType, setFileType] = useState<'image' | 'video'>('image');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [resultUrl, setResultUrl] = useState<string | null>(null);
+  
+  // Mock user data - replace with real data from your authentication system
+  const userData = {
+    name: "User Profile",
+    email: "user@example.com",
+  };
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -24,6 +36,7 @@ const Home: React.FC = () => {
   };
 
   const handleFileSelect = (type: 'image' | 'video') => {
+    setFileType(type);
     if (fileInputRef.current) {
       fileInputRef.current.accept = type === 'image' ? 'image/*' : 'video/*';
       fileInputRef.current.click();
@@ -34,17 +47,27 @@ const Home: React.FC = () => {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
-      // Here you would typically upload the file to your server
-      console.log(`Selected file:`, file.name);
-      
-      // Reset the input after selection
-      e.target.value = '';
+      setResultUrl(null); // Clear previous result
       setUploadOptionsVisible(false);
-      
-      // Show upload confirmation
-      const fileType = file.type.startsWith('image/') ? 'image' : 'video';
-      alert(`Selected ${fileType}: ${file.name}\n(Upload functionality would be implemented here)`);
+      simulateProcessing();
     }
+  };
+
+  // Simulate the file processing/generating
+  const simulateProcessing = () => {
+    setIsProcessing(true);
+    
+    // Simulate API call delay (3 seconds)
+    setTimeout(() => {
+      setIsProcessing(false);
+      
+      // Mock result URLs - in a real app this would come from your backend
+      if (fileType === 'image') {
+        setResultUrl('/sample-anime-result.jpg');
+      } else {
+        setResultUrl('/sample-anime-video-result.mp4');
+      }
+    }, 3000);
   };
 
   return (
@@ -68,58 +91,19 @@ const Home: React.FC = () => {
           <button className="menu-button" onClick={toggleSidebar}>
             <FaBars />
           </button>
-          <div className="user-profile" onClick={() => setSidebarOpen(true)}>
+          <div className="user-profile" onClick={toggleSidebar}>
             <FaUserCircle size={24} />
           </div>
         </div>
       </div>
 
-      {/* Sidebar */}
-      <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
-        <div className="sidebar-header">
-          <FaUserCircle size={64} />
-          <h3>User Profile</h3>
-          <p>user@example.com</p>
-          <button className="close-sidebar" onClick={toggleSidebar}>
-            &times;
-          </button>
-        </div>
-        {/* Overlay only for sidebar */}
-{sidebarOpen && (
-  <div 
-    className="overlay" 
-    onClick={() => {
-      setSidebarOpen(false);
-    }}
-  ></div>
-)}
-
-{/* Separate handling for upload dropdown without full overlay */}
-{uploadOptionsVisible && (
-  <div 
-    className="upload-dropdown-backdrop" 
-    onClick={() => {
-      setUploadOptionsVisible(false);
-    }}
-  ></div>
-)}
-        
-        <div className="sidebar-menu">
-          <div className="menu-section">
-            <h4>Generated Content</h4>
-            <button className="menu-item">
-              <FaImage /> My Images
-            </button>
-            <button className="menu-item">
-              <FaVideo /> My Videos
-            </button>
-          </div>
-          
-          <button className="logout-button" onClick={handleLogout}>
-            <FaSignOutAlt /> Logout
-          </button>
-        </div>
-      </div>
+      {/* Profile Sidebar Component */}
+      <ProfileSidebar 
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        onLogout={handleLogout}
+        userData={userData}
+      />
 
       {/* Main Content */}
       <div className="main-content">
@@ -158,34 +142,41 @@ const Home: React.FC = () => {
               </div>
             )}
           </div>
+          
+          {/* Processing and Results Component */}
+          <FileProcessing 
+            file={selectedFile}
+            isProcessing={isProcessing}
+            resultUrl={resultUrl}
+            type={fileType}
+          />
         </div>
         
-        <div className="features-section">
-          <div className="feature-card">
-            <div className="feature-icon">
-              <FaImage size={32} />
+        {!selectedFile && !resultUrl && (
+          <div className="features-section">
+            <div className="feature-card">
+              <div className="feature-icon">
+                <FaImage size={32} />
+              </div>
+              <h3>Image to Anime</h3>
+              <p>Transform your photos into beautiful anime artwork</p>
             </div>
-            <h3>Image to Anime</h3>
-            <p>Transform your photos into beautiful anime artwork</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon">
-              <FaVideo size={32} />
+            <div className="feature-card">
+              <div className="feature-icon">
+                <FaVideo size={32} />
+              </div>
+              <h3>Video Animation</h3>
+              <p>Convert your videos into stunning anime sequences</p>
             </div>
-            <h3>Video Animation</h3>
-            <p>Convert your videos into stunning anime sequences</p>
           </div>
-        </div>
+        )}
       </div>
 
-      {/* Overlay for sidebar and upload options */}
-      {(sidebarOpen || uploadOptionsVisible) && (
+      {/* Overlay for upload options dropdown */}
+      {uploadOptionsVisible && (
         <div 
-          className="overlay" 
-          onClick={() => {
-            setSidebarOpen(false);
-            setUploadOptionsVisible(false);
-          }}
+          className="upload-dropdown-backdrop" 
+          onClick={() => setUploadOptionsVisible(false)}
         ></div>
       )}
     </div>
