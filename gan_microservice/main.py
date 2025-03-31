@@ -25,7 +25,7 @@ app.websocket("/ws/progress/")(websocket_endpoint)
 class ImageRequest(BaseModel):
     user_id: str
     input_imgs_dir: str
-    model_path: str = ""
+    model_path: str = "/home/advay/Desktop/gaaaannnnnnn/Ganaura/gan_microservice/models/generator.onnx"
     device: str = "cpu"
 
 @app.post("/process-images/")
@@ -66,7 +66,7 @@ async def generate_media(background_tasks: BackgroundTasks, user_id: str = Form(
         media_path (str): URL of the media to download
     """
     task_id = uuid.uuid4()
-    model_path = '/home/dilshad/Desktop/Ganaura/gan_microservice/Ganaura_test.onnx'
+    model_path = '/home/advay/Desktop/gaaaannnnnnn/Ganaura/gan_microservice/models/generator.onnx'
     print(f"Media processing started for task {task_id}")
     
     try:

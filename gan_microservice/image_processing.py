@@ -32,19 +32,37 @@ def load_test_data(image_path, model_name):
     img = process_image(img0, model_name)
     img = np.expand_dims(img, axis=0)
     return img, img0.shape
+def filter(image):
+    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)  # Convert to grayscale
+    edges = cv2.adaptiveThreshold(cv2.medianBlur(gray, 5), 255, 
+                                  cv2.ADAPTIVE_THRESH_MEAN_C, 
+                                  cv2.THRESH_BINARY, 9, 10)  # Edge detection
+
+    # Apply bilateral filtering for a smooth, cartoonish look
+    color = cv2.bilateralFilter(image, d=9, sigmaColor=75, sigmaSpace=75)
+
+    # Convert edges back to 3 channels and blend with the color image
+    edges_colored = cv2.cvtColor(edges, cv2.COLOR_GRAY2RGB)
+    filter_image = cv2.bitwise_and(color, edges_colored)
+
+    return filter_image
 
 def save_images(images, image_path, size):
-    images = (np.squeeze(images) + 1.) / 2 * 255
-    images = np.clip(images, 0, 255).astype(np.uint8)
-    images = cv2.resize(images, size)
-    cv2.imwrite(image_path, cv2.cvtColor(images, cv2.COLOR_RGB2BGR))
+    images = (np.squeeze(images) + 1.) / 2 * 255  # Convert from [-1,1] to [0,255]
+    images = np.clip(images, 0, 255).astype(np.uint8)  # Ensure valid pixel range
+    images = cv2.resize(images, size)  # Resize to original dimensions
 
-async def process_images(task_id, user_id, input_path, output_path, model_path="model path here", device="cpu"):
+    anime_image = filter(images)
+
+    cv2.imwrite(image_path, cv2.cvtColor(anime_image, cv2.COLOR_RGB2BGR))
+
+
+async def process_images(task_id, user_id, input_path, output_path, model_path="/home/advay/Desktop/gaaaannnnnnn/Ganaura/gan_microservice/models/generator.onnx", device="cpu"):
     print(f"Image processing started for user {user_id}, task {task_id}")
     
     try:
         if ort.get_device() == 'GPU' and device == "gpu":
-            session = ort.InferenceSession(model_path, providers=['CUDAExecutionProvider', 'CPUExecutionProvider'])
+            session = ort.InferenceSession(model_path, providers=['CPUExecutionProvider'])
         else:
             session = ort.InferenceSession(model_path, providers=['CPUExecutionProvider'])
         
