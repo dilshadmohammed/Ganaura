@@ -86,11 +86,20 @@ class UserGallery(APIView):
 
     def get(self, request):
         user = JWTUtils.fetch_user_id(request)
-        cloud_media_entries = CloudMedia.objects.filter(user_media__user=user)
+        media_type = request.query_params.get("media_type")  # Get media_type from query params
+
+        if not media_type:  # Return error if media_type is missing
+            return Response(
+                {"error": "media_type parameter is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        cloud_media_entries = CloudMedia.objects.filter(user_media__user=user, media_type=media_type)
+
         serializer = CloudMediaSerializer(cloud_media_entries, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+  
     def delete(self, request):
 
         user_id = JWTUtils.fetch_user_id(request)
