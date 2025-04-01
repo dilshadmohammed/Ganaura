@@ -88,20 +88,6 @@ const Login: React.FC = () => {
           {errors.password && <span className="error">{errors.password}</span>}
         </div>
 
-        {/* Remember Me and Forgot Password */}
-        <div className="options">
-          <div className="remember-me">
-            <input type="checkbox" id="remember-me" />
-            <label htmlFor="remember-me">Remember me</label>
-          </div>
-          <button
-            type="button"
-            className="forgot-password"
-            onClick={() => navigate('/forgot-password')}
-          >
-            Forgot password?
-          </button>
-        </div>
 
         {/* Sign In Button */}
         <button type="submit" className="sign-in-button">
