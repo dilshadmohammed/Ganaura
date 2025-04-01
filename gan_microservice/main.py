@@ -66,7 +66,7 @@ async def generate_media(background_tasks: BackgroundTasks, user_id: str = Form(
         media_path (str): URL of the media to download
     """
     task_id = uuid.uuid4()
-    model_path = '/home/advay/Desktop/gaaaannnnnnn/Ganaura/gan_microservice/models/generator.onnx'
+    model_path = 'models/generator.onnx'
     print(f"Media processing started for task {task_id}")
     
     try:

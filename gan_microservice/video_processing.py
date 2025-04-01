@@ -86,6 +86,19 @@ class Cartoonizer:
         img = img.clip(0, 255).astype(np.uint8)
         img = Image.fromarray(img).resize((wh[0], wh[1]), Image.Resampling.LANCZOS)
         return np.array(img).astype(np.uint8)
+    
+    def filter(image):
+        gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)  
+        edges = cv2.adaptiveThreshold(cv2.medianBlur(gray, 5), 255, 
+                                    cv2.ADAPTIVE_THRESH_MEAN_C, 
+                                    cv2.THRESH_BINARY, 9, 10)  
+
+        color = cv2.bilateralFilter(image, d=9, sigmaColor=75, sigmaSpace=75)
+
+        edges_colored = cv2.cvtColor(edges, cv2.COLOR_GRAY2RGB)
+        filter_image = cv2.bitwise_and(color, edges_colored)
+
+        return filter_image
 
     async def process(self, task_id, user_id):
         vid = Videocap(self.video_path, self.name)

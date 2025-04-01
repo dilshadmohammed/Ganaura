@@ -16,7 +16,7 @@ const LandingPage: React.FC = () => {
   };
 
   return (
-    <div className="home-container">
+    <div className="landingpage-container">
       {/* Top Bar */}
       <div className="top-bar">
         <div className="login-section" onClick={handleLoginClick}>

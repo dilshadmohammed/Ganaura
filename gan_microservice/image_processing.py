@@ -7,7 +7,13 @@ import os
 import shutil
 import tempfile
 import asyncio
+
+import requests
+from s3api import upload_to_cloud
 from websocket_handler import active_connections
+
+DJANGO_API_URL = 'http://127.0.0.1:8000/api/gan/save-media/'
+FASTAPI_SECRET = "absdfasasdfasf"
 
 pic_form = ['.jpeg', '.jpg', '.png', '.JPEG', '.JPG', '.PNG']
 
@@ -45,7 +51,7 @@ def filter(image):
 
     return filter_image
 
-def save_images(images, image_path, size):
+def save_images(images, image_path, size, user_id):
     images = (np.squeeze(images) + 1.) / 2 * 255  # Convert from [-1,1] to [0,255]
     images = np.clip(images, 0, 255).astype(np.uint8)  # Ensure valid pixel range
     images = cv2.resize(images, size)  # Resize to original dimensions
@@ -53,6 +59,17 @@ def save_images(images, image_path, size):
     anime_image = filter(images)
 
     cv2.imwrite(image_path, cv2.cvtColor(anime_image, cv2.COLOR_RGB2BGR))
+
+    media_url = upload_to_cloud(image_path)
+    response = requests.post(
+            DJANGO_API_URL,
+            headers={"FastAPI-Secret": FASTAPI_SECRET},
+            json={
+                "user_id": user_id,
+                "media_type": 'image',
+                "media_url": media_url,
+            }
+        )
 
 
 async def process_images(task_id, user_id, input_path, output_path, model_path="/home/advay/Desktop/gaaaannnnnnn/Ganaura/gan_microservice/models/generator.onnx", device="cpu"):
@@ -70,7 +87,7 @@ async def process_images(task_id, user_id, input_path, output_path, model_path="
         sample_image, shape = load_test_data(input_path, model_path)
         image_path = os.path.join(output_path, os.path.basename(input_path))
         fake_img = session.run(None, {x: sample_image})
-        save_images(fake_img[0], image_path, (shape[1], shape[0]))
+        save_images(fake_img[0], image_path, (shape[1], shape[0]),user_id)
     
     except Exception as e:
         print(f"Error in process_images: {e}")
