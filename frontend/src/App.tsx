@@ -8,7 +8,6 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home/Home';
-import ProfileSidebar from './pages/Home/ProfileSidebar';
 
 const App: React.FC = () => {
   return (
@@ -18,7 +17,6 @@ const App: React.FC = () => {
         <Routes>
           {/* Protected Home route */}
           <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
-          <Route path="/profile" element={<ProtectedRoute element={<ProfileSidebar/>} />} />
 
           {/* Public routes */}
           <Route path="/" element={<LandingPage />} />
