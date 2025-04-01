@@ -19,16 +19,26 @@ The project is built using a three-tier architecture:
 - **Backend**: Django REST framework for user management and business logic
 - **GAN Microservice**: FastAPI service that handles the actual image/video processing
 - **Deep Learning**: TensorFlow for the GAN model implementation
+- **Video Processing**: FFmpeg
+- **Image Processing**: OpenCV
+- **Cloud Storage**: Digital ocean spaces
 
 ## Project Structure
 
 ```
 ganaura/
-├── frontend/           # React Vite frontend application
-├── backend/            # Django backend application
-└── gan_microservice/   # FastAPI microservice for GAN processing
-    ├── main.py         # FastAPI application entry point
-    └── utils.py        # Utility functions for GAN processing
+├── frontend/               # React Vite frontend application
+├── backend/                # Django backend application
+    └── generation_service/ # Django app for gan related route
+    └── user/               # Django app for user auth
+├── gan_microservice/       # FastAPI microservice for GAN processing
+└── gan_model/              # Gan model training files
+    └── dataset/            # Dataset for gan training
+        └── style
+        └── real_photo        
+    └── inputs/             # Sample inputs for inference
+        └── imgs
+        └── videos        
 ```
 
 ## Installation Guide
@@ -37,9 +47,10 @@ ganaura/
 
 - Python 3.10+
 - Node.js 22+
-- npm or yarn
+- npm
 - TensorFlow 2.x
 - CUDA-compatible GPU (recommended for faster processing)
+- FFmpeg
 
 ### Step 1: Clone the Repository
 
@@ -55,12 +66,13 @@ cd backend
 
 # Create a virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows use: venv\Scripts\activate
+source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
 
 # Apply migrations
+python manage.py makemigrations
 python manage.py migrate
 
 # Start the Django server
@@ -76,13 +88,10 @@ cd ../frontend
 
 # Install dependencies
 npm install
-# or if you use yarn
-yarn install
 
 # Start the development server
 npm run dev
-# or
-yarn dev
+
 ```
 
 The frontend will be available at http://localhost:5173/
@@ -94,11 +103,29 @@ cd ../gan_microservice
 
 # Create a virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows use: venv\Scripts\activate
+source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
 
+# Start the development server
+python main.py
+
 ```
 
 The GAN microservice will be available at http://localhost:9000/
+
+## For GAN training
+```bash
+cd gan_model
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Download the dataset
+# (Make sure to place it according to the project structure)
+# https://drive.google.com/drive/folders/19J-3UqEoSwqAyCcOQB9ZtDnRCLyTO9bC?usp=drive_link
+
+# Start training
+python Ganaura_train.py
+
