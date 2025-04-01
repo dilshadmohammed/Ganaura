@@ -2,7 +2,7 @@
 
 Ganaura is a web application that transforms regular images and videos into anime style art using GAN (Generative Adversarial Network) technology.
 
-![Ganaura LandingPage](https://github.com/munawir40/Ganaura/blob/main/Landin%20Page.jpeg)
+![Ganaura LandingPage](assets/landing_page.jpeg)
 
 ## Project Overview
 
@@ -128,4 +128,55 @@ pip install -r requirements.txt
 
 # Start training
 python Ganaura_train.py
+```
 
+
+## Sample Input vs Output
+
+### Image 1
+<table>
+  <tr>
+    <td><b>Input</b></td>
+    <td><b>Output</b></td>
+  </tr>
+  <tr>
+    <td><img src="assets/imgs/sample_inputs/img1.jpeg" width="300"></td>
+    <td><img src="assets/imgs/sample_outputs/img1.jpeg" width="300"></td>
+  </tr>
+</table>
+
+### Image 2
+<table>
+  <tr>
+    <td><b>Input</b></td>
+    <td><b>Output</b></td>
+  </tr>
+  <tr>
+    <td><img src="assets/imgs/sample_inputs/img2.jpeg" width="300"></td>
+    <td><img src="assets/imgs/sample_outputs/img2.jpeg" width="300"></td>
+  </tr>
+</table>
+
+### Image 3
+<table>
+  <tr>
+    <td><b>Input</b></td>
+    <td><b>Output</b></td>
+  </tr>
+  <tr>
+    <td><img src="assets/imgs/sample_inputs/img3.jpeg" width="300"></td>
+    <td><img src="assets/imgs/sample_outputs/img3.jpeg" width="300"></td>
+  </tr>
+</table>
+
+### Image 4
+<table>
+  <tr>
+    <td><b>Input</b></td>
+    <td><b>Output</b></td>
+  </tr>
+  <tr>
+    <td><img src="assets/imgs/sample_inputs/img4.jpeg" width="300"></td>
+    <td><img src="assets/imgs/sample_outputs/img4.jpeg" width="300"></td>
+  </tr>
+</table>
