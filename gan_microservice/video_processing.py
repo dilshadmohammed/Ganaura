@@ -117,16 +117,26 @@ class Cartoonizer:
             if vid.count < total_frames and not vid.ret and vid.q.empty():
                 video_writer.release()
                 raise ValueError("The video is broken.")
+            
             frame = vid.read()
+            
+            filtered_frame = filter(frame)
+            
             fake_img = self.sess.run(None, {self.sess.get_inputs()[0].name: frame})[0]
             fake_img = self.post_process(fake_img, (vid.ori_width, vid.ori_height))
+            
+            filtered_fake_img = filter(fake_img)
 
             if self.if_concat == "Horizontal":
-                fake_img = np.hstack((self.post_process(frame, (vid.ori_width, vid.ori_height)), fake_img))
+                
+                combined_img = np.hstack((filtered_frame, filtered_fake_img))
             elif self.if_concat == "Vertical":
-                fake_img = np.vstack((self.post_process(frame, (vid.ori_width, vid.ori_height)), fake_img))
+                combined_img = np.vstack((filtered_frame, filtered_fake_img))
+            else:
+                
+                combined_img = filtered_fake_img
 
-            video_writer.write(fake_img[:, :, ::-1])
+            video_writer.write(combined_img[:, :, ::-1])
 
             progress = int((i + 1) / total_frames * 100)
             websocket = active_connections.get(user_id)
@@ -142,11 +152,11 @@ class Cartoonizer:
             sound_path = os.path.join(self.output_dir, "sound.mp3")
             subprocess.check_call(["ffmpeg", "-loglevel", "error", "-i", self.video_path, "-y", sound_path])
             subprocess.check_call(["ffmpeg", "-loglevel", "error", "-i", sound_path, "-i", output_video_path, "-y", "-c:v", "libx264", "-c:a", "copy", "-crf", "25", output_video_sounds_path])
-            final= output_video_sounds_path
+            final = output_video_sounds_path
         except:
             print("FFmpeg failed, returning silent video.")
             final = output_video_path
-        
+                
         media_url = upload_to_cloud(final)
         response = requests.post(
             DJANGO_API_URL,
@@ -158,7 +168,7 @@ class Cartoonizer:
             }
         )
         self.cleanup_files(self.video_path, output_video_path, sound_path, output_video_sounds_path)
-        
+                
         return media_url
         
         
