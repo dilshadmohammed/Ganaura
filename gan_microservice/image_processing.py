@@ -33,15 +33,13 @@ def load_test_data(image_path, model_name):
     img = np.expand_dims(img, axis=0)
     return img, img0.shape
 def filter(image):
-    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)  # Convert to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)  
     edges = cv2.adaptiveThreshold(cv2.medianBlur(gray, 5), 255, 
                                   cv2.ADAPTIVE_THRESH_MEAN_C, 
-                                  cv2.THRESH_BINARY, 9, 10)  # Edge detection
+                                  cv2.THRESH_BINARY, 9, 10)  
 
-    # Apply bilateral filtering for a smooth, cartoonish look
     color = cv2.bilateralFilter(image, d=9, sigmaColor=75, sigmaSpace=75)
 
-    # Convert edges back to 3 channels and blend with the color image
     edges_colored = cv2.cvtColor(edges, cv2.COLOR_GRAY2RGB)
     filter_image = cv2.bitwise_and(color, edges_colored)
 
