@@ -87,15 +87,41 @@ class Cartoonizer:
         img = Image.fromarray(img).resize((wh[0], wh[1]), Image.Resampling.LANCZOS)
         return np.array(img).astype(np.uint8)
     
-    def filter(image):
-        gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)  
+    def filter(self, image):
+        # Ensure image is uint8
+        if image.dtype != np.uint8:
+            image = image.astype(np.uint8)
+
+        # Remove batch dimension if present (e.g., (1, height, width, channels) -> (height, width, channels))
+        if len(image.shape) == 4 and image.shape[0] == 1:
+            image = image.squeeze(0)  # or image[0]
+
+        # Check the number of channels
+        if len(image.shape) == 2:  # Grayscale image (height, width)
+            gray = image
+        elif len(image.shape) == 3 and image.shape[2] in [3, 4]:  # RGB or RGBA
+            gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+        else:
+            raise ValueError(f"Unsupported image shape: {image.shape}")
+
+        # Apply edge detection
         edges = cv2.adaptiveThreshold(cv2.medianBlur(gray, 5), 255, 
                                     cv2.ADAPTIVE_THRESH_MEAN_C, 
-                                    cv2.THRESH_BINARY, 9, 10)  
+                                    cv2.THRESH_BINARY, 9, 10)
 
-        color = cv2.bilateralFilter(image, d=9, sigmaColor=75, sigmaSpace=75)
+        # If input was grayscale, convert it to 3-channel for bilateral filter
+        if len(image.shape) == 2:
+            color = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
+        else:
+            color = image
 
+        # Apply bilateral filter
+        color = cv2.bilateralFilter(color, d=9, sigmaColor=75, sigmaSpace=75)
+
+        # Convert edges to 3-channel for bitwise operation
         edges_colored = cv2.cvtColor(edges, cv2.COLOR_GRAY2RGB)
+        
+        # Combine color image with edges
         filter_image = cv2.bitwise_and(color, edges_colored)
 
         return filter_image
@@ -120,12 +146,12 @@ class Cartoonizer:
             
             frame = vid.read()
             
-            filtered_frame = filter(frame)
+            filtered_frame = self.filter(frame)
             
             fake_img = self.sess.run(None, {self.sess.get_inputs()[0].name: frame})[0]
             fake_img = self.post_process(fake_img, (vid.ori_width, vid.ori_height))
             
-            filtered_fake_img = filter(fake_img)
+            filtered_fake_img = self.filter(fake_img)
 
             if self.if_concat == "Horizontal":
                 
@@ -133,7 +159,6 @@ class Cartoonizer:
             elif self.if_concat == "Vertical":
                 combined_img = np.vstack((filtered_frame, filtered_fake_img))
             else:
-                
                 combined_img = filtered_fake_img
 
             video_writer.write(combined_img[:, :, ::-1])
