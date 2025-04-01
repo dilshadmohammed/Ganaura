@@ -67,16 +67,15 @@ class Ganaura(tf.keras.Model):
         # Load base VGG19 model without top layers
         base_model = VGG19(weights='imagenet', include_top=False)
         
-        # Select specific layers for feature extraction
         layer_names = [
-            'block1_conv2',   # Early layer for low-level features
-            'block2_conv2',   # Mid-level features
-            'block3_conv2',   # Higher-level features
-            'block4_conv2',   # Even higher-level features
-            'block5_conv2'    # Most abstract features
+            'block1_conv2',   
+            'block2_conv2',   
+            'block3_conv2',   
+            'block4_conv2',  
+            'block5_conv2'    
         ]
         
-        # Create a model that outputs features from specified layers
+       
         outputs = [base_model.get_layer(name).output for name in layer_names]
         
         # Create and return the feature extraction model
@@ -292,9 +291,9 @@ class Ganaura(tf.keras.Model):
 # Main execution
 if __name__ == "__main__":
     # Define directories
-    real_dir = '/home/dilshad/Desktop/Ganfeb/dataset/train_photo'  # Replace with your real images directory
-    anime_dir = '/home/dilshad/Desktop/Ganfeb/dataset/Hayao/style'  # Replace with your anime images directory
-    checkpoint_dir = '/home/dilshad/Desktop/Ganfeb/new_checkpoints'
+    real_dir = 'dataset/real_photo'  # Replace with your real images directory
+    anime_dir = 'dataset/style'  # Replace with your anime images directory
+    checkpoint_dir = 'checkpoints'
     os.makedirs(checkpoint_dir, exist_ok=True)
     gpus = tf.config.experimental.list_physical_devices('GPU')
     if gpus:
@@ -310,6 +309,5 @@ if __name__ == "__main__":
     # Initialize and train model
     gan = Ganaura(learning_rate=0.0002)
     print(len(dataset))
-    # gan.train(dataset,10,checkpoint_dir)
-    gan.save_to_h5_and_onnx('/home/dilshad/Desktop/Ganfeb/final_checkpoints')
-    # gan.train(dataset, epochs=50, checkpoint_dir=checkpoint_dir)
+    gan.train(dataset,100,checkpoint_dir)
+    gan.save_to_h5_and_onnx('final_checkpoints')
