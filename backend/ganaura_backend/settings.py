@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import decouple
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -85,18 +86,30 @@ WSGI_APPLICATION = 'ganaura_backend.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
+# Sqlite database config only for development purpose
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": decouple.config("DATABASE_ENGINE"),
+        "NAME": decouple.config("DATABASE_NAME"),
+        "USER": decouple.config("DATABASE_USER"),
+        "PASSWORD": decouple.config("DATABASE_PASSWORD"),
+        "HOST": decouple.config("DATABASE_HOST"),
+        "PORT": decouple.config("DATABASE_PORT"),
     }
 }
 
 
+
 # Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {

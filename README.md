@@ -68,6 +68,8 @@ cd backend
 python -m venv venv
 source venv/bin/activate
 
+# Create a .env file using .env.sample as a reference.
+
 # Install dependencies
 pip install -r requirements.txt
 
